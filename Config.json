@@ -1,0 +1,31 @@
+{
+	"token": "",
+	"discord": {
+		"Prefix": "!",
+		"SeamlessMode": false,
+		"CategoryName": "Game Chat",
+		"zone": {
+			"enabled": true,
+			"name": "general"
+		},
+		"party": {
+			"enabled": true,
+			"name": "party"
+		},
+		"guild": {
+			"enabled": true,
+			"name": "guild"
+		},
+		"whisper": {
+			"enabled": true,
+			"name": "whisper"
+		}
+	},
+	"game": {
+		"LogDiscrims": false
+	},
+	"chatLogFile": {
+		"enabled": true,
+		"LogDiscordMessages": false
+	}
+}

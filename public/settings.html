@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Settings</title>
+        <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+        <style>
+            button{
+                margin-right: 10px;
+            }
+            .padding{
+                padding: 10px;
+            }
+            .margin {
+                margin: 10px;
+            }
+            .btn {
+                height: 30px;
+                font-size: 12px;
+            }
+            .line {
+                margin-top: 20px;
+                border-top: 2px solid rgba(0, 0, 0, 0.15);
+            }
+            .line-right {
+                margin-top: 10px;
+                margin-left: 5px;
+                margin-right: 5px;
+                height: 100px;
+                border-right: 2px solid rgba(0, 0, 0, 0.15);
+            }
+            body{
+                overflow: scroll;
+                overflow-x: hidden;
+            }
+            ::-webkit-scrollbar {
+                width: 0;  /* Remove scrollbar space */
+            }
+            .btn-red, .btn-red:hover, .btn-red:active, .btn-red:visited {
+                background-color: #ff3838;
+                color: white;
+            }
+
+        </style>
+        <script src="settingsHandler.js"></script>
+    </head>
+    <body>
+        <div class="margin">
+            <h5>Important Settings</h5>
+            <p>
+                <label>Token : </label>
+                <input type ="text" id="token">
+                <button class="btn btn-primary" type="button" id="updateTokenBtn" style="float: right;">Update Token</button>
+            </p>
+
+            <p>
+                <label>Server : </label>
+                <input name="Server Name" type="text" id="serverName">
+                <button class="btn btn-primary" type="button" id="connectBtn" style="float: right;">Connect Discord</button>
+            </p>
+
+            <div style="margin-bottom: 10px;">
+                <button class="btn btn-primary" type="button" id="loginBtn">Login</button>
+                <button class="btn btn-primary" type="button" id="joinBtn">Join Server</button>
+
+                <button class="btn btn-primary" type="button" id="saveBtn" style="float: right;">Save Settings</button>
+            </div>
+            
+            <input name="AutoRelog" type="checkbox" id="autoRelogChk"> Auto-Relog
+
+            <div class="line">
+                <h5 style="margin-top: 15px; margin-bottom: 15px;">Config File</h5>
+
+                <p>
+                    <label>Token : </label>
+                    <input type ="text" id="tokenConf" style="width: 204px;">
+                </p>
+
+                <p>
+                    <label>Prefix : </label>
+                    <input type ="text" id="prefix" style="width: 25px;">
+                    <label>Category : </label>
+                    <input type ="text" id="category" style="width: 100px;">     
+                </p>
+                <p>           
+                    <input type="checkbox" id="seamlessChk"> <label>Seamless Mode</label>
+                </p>
+
+                <h6>Channel Config</h6>
+                <div class="row justify-content-center" style="margin: 0;">
+                    <div class="padding">
+                        <label><h6>Zone</h6></label><br>
+                        <input type="checkbox" id="zoneEnabledChk"> <label>Enabled</label><br>
+                        <input type ="text" id="zone" style="width: 75px;" placeholder="Channel">
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="padding">
+                        <label><h6>Guild</h6></label><br>
+                        <input type="checkbox" id="guildEnabledChk"> <label>Enabled</label><br>
+                        <input type ="text" id="guild" style="width: 75px;" placeholder="Channel">
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="padding">
+                        <label><h6>Party</h6></label><br>
+                        <input type="checkbox" id="partyEnabledChk"> <label>Enabled</label><br>
+                        <input type ="text" id="party" style="width: 75px;" placeholder="Channel">
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="padding">
+                        <label><h6>Whisper</h6></label><br>
+                        <input type="checkbox" id="whisperEnabledChk"> <label>Enabled</label><br>
+                        <input type ="text" id="whisper" style="width: 75px;" placeholder="Channel">
+                    </div>
+                </div>
+                <input type="checkbox" id="logDiscrimsChk"> <label>Log Discrims In-Game</label><br>
+
+                <h6>Log File</h6>
+                <input type="checkbox" id="enableLogFileChk"> <label>Enable</label>
+                <input type="checkbox" id="logDiscMsgChk" style="margin-left: 10px;"> <label>Log Discord Messages</label>
+            </div>
+        </div>
+    </body>
+</html>

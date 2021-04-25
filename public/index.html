@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AQW Connect</title>
+    <style>
+		html, body
+		{
+			overflow-y: hidden;
+			overflow-x: hidden;
+			height: 100%;
+			width: 100%;
+			background-color: rgb(27, 27, 27);
+      		margin: 0;
+		}
+
+        .flashContainer {
+			height: 97%;
+		}
+    </style>
+	<script src="../modules/FlashHandler.js"></script>
+	<style>
+		.nav{
+			width: 100%;
+			height: 10px;
+			margin-bottom: 10px;
+		}
+	</style>
+	<script>
+		const { BrowserWindow } = require('electron').remote
+		const path = require('path')
+		var SettingsOpen = false;
+		onload = function() {	
+			var btn = document.getElementById("btn");
+			btn.addEventListener("click", function(event) {
+				if (SettingsOpen) { Settings.show(); return; }
+				let Settings = new BrowserWindow({ 
+					width: 450,
+					height: 430,
+					minWidth: 450,
+					maxWidth: 450,
+					maxHeight: 750,
+					webPreferences: {
+						nodeIntegration: true
+					},
+					show: false,
+					alwaysOnTop: true
+				});
+				Settings.setMenu(null);
+				Settings.setIcon(path.join(__dirname, "Logo256.png"));
+				Settings.loadFile(path.join(__dirname, "settings.html"));
+				SettingsOpen = true;
+
+				Settings.on('close', function(event) {
+					SettingsOpen = false;
+				});
+				Settings.on('ready-to-show', () => { Settings.show() });
+				
+			});
+		}
+	</script>
+</head>
+<body>
+    <div class = "nav">
+      <button id = "btn">
+        Settings
+      </button>
+    </div>
+    <div class="flashContainer">
+      <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="externalInterface"
+        codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" height="100%"
+        width="100%">
+        <param name="movie" value="swf/AQWConnectPremium.swf" />
+        <param name="LOOP" value="false" />
+        <param name="SCALE" value="default" />
+        <param name="allowScriptAccess" value="always" />
+        <param name="allowFullScreen" value="true" />
+        <param name="menu" value="false" />
+        <param name="wmode" value="window" />
+        <embed id="gameSWF" src="swf/AQWConnectPremium.swf" loop="false"
+          pluginspage="https://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"
+          type="application/x-shockwave-flash" allowScriptAccess="always" allowFullScreen="true" scale="default"
+          wmode="window" menu="false" height="100%" width="100%"></embed>
+      </object>
+    </div>
+  </body>
+</html>
