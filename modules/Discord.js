@@ -2,6 +2,7 @@ const DiscordModule = require('discord.js');
 const AQMessage = require('./AQMessage')
 const path = require("path");
 const Log = require('./Log')
+const { dialog } = require('electron')
 
 //Deleted the Config Json cache and updates the require whenever the config file is edited.
 //This enables Dynamic JSON File Loading
@@ -17,6 +18,9 @@ var Config = require(path.join(__dirname, "..", "Config.json"))
 function ReadyListener(client)
 {
 	console.log(`Logged in as ${client.user.tag}!`);
+	dialog.showMessageBox({
+		message: `Logged in as ${client.user.tag}!`
+	})
 }
 
 /**
@@ -38,71 +42,84 @@ function findZone(channel)
 }
 
 /**
+ * Handles DM Command
+ * @param {String} sender 
+ * @param {String} reciever 
+ * @param {String} message 
+ */
+function DMHandler(sender, reciever, message)
+{
+	if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
+			Log.Write(`[Discord] ${sender} -> ${reciever} : ${message}`);
+	if (Config['game']['LogDiscrims'])
+		message = `${sender} : ${message}`;
+
+	message = AQMessage.XMLEncode(message);
+	AQMessage.SendDM(message, reciever);
+}
+
+/**
+ * Handles Text Messages
+ * @param {String} message 
+ * @param {String} zone 
+ */
+function TextHandler(sender, message, zone)
+{
+	if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
+			Log.Write(`[Discord] ${sender} : ${message}`);
+	if (Config['game']['LogDiscrims'])
+		message = `${sender} : ${message}`;
+
+	message = AQMessage.XMLEncode(message);
+	AQMessage.Send(message, zone);
+}
+
+/**
  * 
  * @param {DiscordModule.Message} Message 
  */
 function MessageListener(Message)
 {
-	var Content = String(Message.content);
+	//Return if message is not from an enabled channel or from the bot
 	var BotChannels = [Config['discord']['zone']['name'], Config['discord']['party']['name'], Config['discord']['guild']['name'], Config['discord']['whisper']['name']];
-	if (!BotChannels.includes(Message.channel.name) && Config['discord'][findZone(Message.channel.name)]['enabled'] || Message.author.id == Discord.Client.user.id)
+	if (!BotChannels.includes(Message.channel.name) || Message.author.id == Discord.Client.user.id)
 		return;
-	if (Content.toLowerCase().includes(Config['discord']['Prefix'] + "dm "))
+	if (!Config['discord'][findZone(Message.channel.name)]['enabled']) 
+		return;
+
+	var Content = String(Message.content);
+	var defaultMatch = /(\w{2,3}) (.+)/;
+	var match = Content.match(/(\w{2,3}) (.+):\s*(.+)/);
+	var defaultMatched = false;
+	if (match == null) 
 	{
-		var message = Content.substring(Content.indexOf(':') + 1);
-		var reciever = Content.substring(4, Content.indexOf(':'));
-
-		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			Log.Write(`[Discord] ${Message.author.username} -> ${reciever} : ${message}`);
-		if (Config['game']['LogDiscrims'])
-			message = `${Message.author.username} : ${message}`;
-
-		if(message[0] == ' ') message = message.substring(1);
-		message = AQMessage.XMLEncode(message);
-		AQMessage.SendDM(message, reciever);
-		return;
+		match = Content.match(defaultMatch);
+		if (match) defaultMatched = true;
 	}
-
-	if ((Content.toLowerCase().includes(Config['discord']['Prefix'] + "msg ") && Content.includes(':')) || Config['discord']['SeamlessMode'])
+	//match[0] = full string
+	//match[1] = command
+	//match[2] = command arg
+	//match[3] = message
+	if (!Config['discord']['SeamlessMode'] && match != null)
 	{
-		var message = "";
-		var argument = "";
-		if (Config['discord']['SeamlessMode'])
+		if (Content.startsWith(Config['discord']['Prefix']))
 		{
-			message = Content;
-			argument = findZone(Message.channel.name);
+			if (match[1].toLocaleLowerCase() == "dm") {
+				DMHandler(Message.author.username, match[2], match[3]);
+				return;
+			}
+			if (match[1].toLocaleLowerCase() == "msg") {
+				TextHandler(Message.author.username,
+					defaultMatched ? match[2] : match[3], defaultMatched ? "zone" : match[2]);
+				return;
+			}
 		}
-		else
-		{
-			message = Content.substring(Content.indexOf(':') + 1);
-			argument = Content.substring(5, Content.indexOf(':'));
-			if (Content.indexOf(':') > 10)
-				argument = "zone";
-		}
-
-		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			Log.Write(`[Discord] ${Message.author.username} : ${message}`);
-		if (Config['game']['LogDiscrims'])
-			message = `${Message.author.username} : ${message}`;
-
-		if(message[0] == ' ') message = message.substring(1);
-		message = AQMessage.XMLEncode(message);
-		AQMessage.Send(message, argument);
-		return;
+		else return; //Dosent start with prefix while seamless mode is off.
 	}
-
-	if (Content.toLowerCase().includes(Config['discord']['Prefix'] + "msg "))
+	else if (Config['discord']['SeamlessMode'])
 	{
-		var message = Content.substring(5);
-		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			Log.Write(`[Discord] ${Message.author.username} : ${message}`);
-		if (Config['game']['LogDiscrims'])
-			message = `${Message.author.username} : ${message}`;
-
-		if(message[0] == ' ') message = message.substring(1);
-		message = AQMessage.XMLEncode(message);
-		AQMessage.Send(message, "zone");
-		return;
+		var zone = findZone(Message.channel.name);
+		TextHandler(Message.author.username, Content, zone);
 	}
 }
 

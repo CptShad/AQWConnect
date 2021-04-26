@@ -1,7 +1,8 @@
 const path = require("path");
 const { ConfigHandler, DefaultFile } = require("../modules/ConfigHandler");
 const { ipcRenderer, shell } = require("electron");
-const Config = require("../Config.json");
+const { dialog } = require('electron').remote;
+var Config = require("../Config.json");
 var Connected = false;
 
 Connected = ipcRenderer.sendSync("discord-isEnabled");
@@ -109,7 +110,25 @@ onload = function () {
         File["chatLogFile"]["LogDiscordMessages"] = logDiscMsgChk.checked;
 
         ConfigHandler.UpdateConfig(File);
+        dialog.showMessageBox({
+            message: `Config File Saved`
+        })
     });
+
+    var resetBtn = document.getElementById("resetBtn");
+    resetBtn.addEventListener("click", () => {
+        dialog.showMessageBox({
+            message : "Are you sure you want to reset the Config?",
+            buttons : [ 'Yes', 'No' ]
+        }).then((value) => {
+            if (value.response == 0)
+            {
+                ConfigHandler.UpdateConfig(DefaultFile);
+                Config = DefaultFile;
+                UpdateView();
+            }
+        })
+    })
 };
 function UpdateView() {
     var tokenConf = document.getElementById("tokenConf");
