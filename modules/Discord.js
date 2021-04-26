@@ -50,7 +50,7 @@ function MessageListener(Message)
 		var reciever = Content.substring(4, Content.indexOf(':'));
 
 		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			console.Log(`[Discord] ${Message.author.username} -> ${reciever} : ${message}`);
+			Log.Write(`[Discord] ${Message.author.username} -> ${reciever} : ${message}`);
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
@@ -80,7 +80,7 @@ function MessageListener(Message)
 		}
 
 		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			console.Log(`[Discord] ${Message.author.username} : ${message}`);
+			Log.Write(`[Discord] ${Message.author.username} : ${message}`);
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
@@ -93,7 +93,7 @@ function MessageListener(Message)
 	{
 		var message = Content.substring(5);
 		if (Config['chatLogFile']['enabled'] && Config['chatLogFile']['LogDiscordMessages'])
-			console.Log(`[Discord] ${Message.author.username} : ${message}`);
+			Log.Write(`[Discord] ${Message.author.username} : ${message}`);
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
@@ -140,28 +140,33 @@ class Discord
 	 */
 	static SendMessage(Message, Channel)
 	{
-		var CategoryName = Config['discord']['CategoryName'];
-		var ChannelName = Config['discord'][Channel]['name'];
-		var Category = Discord.Client.channels.cache.find(ch => ch.type === "category" && ch.name == CategoryName)
-		var ChannelbyName = Category.children.find(ch =>  ch.name == ChannelName);
-		if (ChannelbyName != null)
-		{
-			console.log(Message);
-			Log.Write(Message);
-			if (Config['discord']['embedMessages'])
-				ChannelbyName.send({
-					embed: {
-						color: 51455,
-						description : Message,
-						title : "In-Game Chat Message",
-						timestamp: new Date(),
-						footer: {
-							text: "AQW Connect",
-							icon_url: "https://imgur.com/GW8sXRK.png"
+		try {
+			var CategoryName = Config['discord']['CategoryName'];
+			var ChannelName = Config['discord'][Channel]['name'];
+			var Category = Discord.Client.channels.cache.find(ch => ch.type === "category" && ch.name == CategoryName)
+			var ChannelbyName = Category.children.find(ch =>  ch.name == ChannelName);
+			if (ChannelbyName != null)
+			{
+				console.log(Message);
+				Log.Write(Message);
+				if (Config['discord']['embedMessages'])
+					ChannelbyName.send({
+						embed: {
+							color: 51455,
+							description : Message,
+							title : "In-Game Chat Message",
+							timestamp: new Date(),
+							footer: {
+								text: "AQW Connect",
+								icon_url: "https://imgur.com/GW8sXRK.png"
+							}
 						}
-					}
-				});
-			else ChannelbyName.send(Message);
+					});
+				else ChannelbyName.send(Message);
+			}
+		}
+		catch(error) {
+			console.log("Error finding discord channel.")
 		}
 	}
 
