@@ -3,7 +3,9 @@
 Welcome to the new version of AQW Connect now made with Electron.js similar to the Official AQW Launcher and AQ Lite launcher! (Image of Version V1.0-Beta)
 
 If you are looking for the source for the old version made in C# then head over to [Old Repo.](https://github.com/CptShad/AQWConnectOld)
+
 Why the new version? Because of the "Flash Kill" and future windows updates removing flash altogether doing it in electron was the next best way and also make it more update date and in line with AE's own official Game Launcher.
+
 Making it in Electron also makes it **Cross Platform** which means you can finally use it on Windows, Mac and Linux!
 
 ### [Current Release V1.0-Beta](https://github.com/CptShad/AQWConnect/releases/tag/v1.0-beta)
@@ -34,22 +36,36 @@ AQW Connect is a modified game client that runs in electron to connect your game
 ### Feature Showcase
 Here are some of the features that are in the program currently, This will be updated as new versions are released but here are some of the main ones.
 All or mostly all of the features are controlled through the settings menu. (The screenshot is of version V1.0-Beta.
+
 <img src="https://imgur.com/T2xGOrW.png"></img>
+
 * Ability to Login and Join any server from the settings menu.
+
 * Ability to Auto-Relog if disconnected, The server chosen will be the one in the "Server" Field of "Artix" by default.
+
 * Ability to create chat logs which stores all game chat.  (Needs discord connected to start the logging). Stores the chat logs in neat folders as .txt files according to the day.
+
 <img src = "https://imgur.com/SPHerKM.png">
+
 * Ability to configure the discord server channels according to your needs.
+
 * Log Discrims In-Game : Ability to hide or show who sent the message using discord. (Show their discord name in AQW)
+
 <img src="https://cdn.discordapp.com/attachments/735793063968112660/748594299134017576/unknown.png">
 <img src="https://media.discordapp.net/attachments/735793063968112660/748594356432404540/unknown.png">
+
 * Seamless mode: It allows you to send messages from discord without using the prefix (ex``` !msg Hello``` will just be Hello) as long as its the correct channel.
 So if you are in the General/zone channel and you type anything in it, it will send it in game
 You can do it for General / Party / Guild. For dms you still need to use the command ```(!dm <receiver>:<message>)```
+
 <img src="https://media.discordapp.net/attachments/735793063968112660/748599847908802631/unknown.png">
+
 * Ability to set custom prefix for the discord commands
+
 <img src="https://media.discordapp.net/attachments/735793063968112660/748588899076538438/unknown.png">
+
 * Ability to log messages as embeds or regular
+
 <img src="https://media.discordapp.net/attachments/735793063968112660/748589309262823584/unknown.png">
 
 ## Setup Instructions
@@ -59,27 +75,36 @@ Below you'll find all the info you need on how to use AQW Connect.
 In order to use the discord bot to log in-game messages, setting up a discord server for the program to log them is required.
 - Create a new Discord Server using this template link: https://discord.new/bZSrNUTeN9nk. This server will be used to communicate between the bot and the client.
 - Alternatively you can invite the bot to an existing server as long as the following channels are set up under a category called "Game Chat":
-- General
-- Guild
-- Party
-- Whisper
+	- General
+	- Guild
+	- Party
+	- Whisper
+
 <img src="https://imgur.com/gWxl6MG.png">
-If you want to modify the default layout change the "Category" and "Channel Config" fields accordingly
+
+**If you want to modify the default layout change the "Category" and "Channel Config" fields accordingly**
 
 That is all you need to setup your server, Now just make the bot and invite it!
 
 ### How to build a Discord Bot
+
 You need to build a discord bot and connect it to the client and invite it to your server for AQW Connect to work. It is done this way for privacy reasons. If i were to setup one common bot for all the servers then i would be able to see ALL the servers under the bot  and see all the client messaged too. Although this is a bit frustrating, This ensures privacy.
+
 Follow the instructions here to Build / Make a Discord Bot. Just name it "AQW Connect" or Whatever you want to name the bot. Once you do that, Invite your Bot to the server.
 https://discordpy.readthedocs.io/en/latest/discord.html
+
 - Copy the Bot Token by clicking 'Click to Reveal Token' on Bot Tab of your Bot Application.
 - Paste that into the 'token" field in the settings menu on the client and click "Save Settings"
+
 <img src ="https://imgur.com/AHtZ0BE.png">
+
 - Now click the "Connect Discord" button, If you did everything correctly the bot will now be online in your discord server and its ready and logging.
 - If you want to disconnect it from logging, Click the button again to disconnect it.
+
 <img src="https://imgur.com/Luelujt.png">
 
 ## How to use
+
 Once the Bot, Server and the settings are all setup, You can use these commands to send messages In-Game using discord commands.
 - ```!msg [your message]```
 Sends the message in the Regular Chat In Game. Example : !msg Hey guys!.
@@ -92,7 +117,8 @@ Sends a DM to the recipient. Example : !DM captain shad:Hey guys!
 
 # Join our Discord!
 If you have any issues or just want to hang out and talk, Join our discord!
-Join : https://discord.gg/Kvm54Gv
+
+**Join : https://discord.gg/Kvm54Gv**
 
   
 
