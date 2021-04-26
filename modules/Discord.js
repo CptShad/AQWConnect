@@ -45,7 +45,7 @@ function MessageListener(Message)
 {
 	var Content = String(Message.content);
 	var BotChannels = [Config['discord']['zone']['name'], Config['discord']['party']['name'], Config['discord']['guild']['name'], Config['discord']['whisper']['name']];
-	if (!BotChannels.includes(Message.channel.name))
+	if (!BotChannels.includes(Message.channel.name) && Config['discord'][findZone(Message.channel.name)]['enabled'] || Message.author.id == Discord.Client.user.id)
 		return;
 	if (Content.toLowerCase().includes(Config['discord']['Prefix'] + "dm "))
 	{
@@ -71,8 +71,6 @@ function MessageListener(Message)
 		{
 			message = Content;
 			argument = findZone(Message.channel.name);
-			if (argument == "" || Message.author.id == Discord.Client.user.id)
-				return;
 		}
 		else
 		{
@@ -148,8 +146,8 @@ class Discord
 		try {
 			var CategoryName = Config['discord']['CategoryName'];
 			var ChannelName = Config['discord'][Channel]['name'];
-			var Category = Discord.Client.channels.cache.find(ch => ch.type === "category" && ch.name == CategoryName)
-			var ChannelbyName = Category.children.find(ch =>  ch.name == ChannelName);
+			var Category = Discord.Client.channels.cache.find(ch => ch.type == "category" && ch.name.toLowerCase() == CategoryName.toLowerCase())
+			var ChannelbyName = Category.children.find(ch =>  ch.name.toLowerCase() == ChannelName.toLowerCase());
 			if (ChannelbyName != null)
 			{
 				console.log(Message);
