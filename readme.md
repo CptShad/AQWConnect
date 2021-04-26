@@ -13,13 +13,12 @@ Download and extract the AQW.Connect zip file according to your operating system
 
 
 ## Table of Contents
-* [Introduction](##Introduction)
-* [How it works](#How-it-works)
-	* [Feature Showcase](#Feature-Showcase)
-* [Setup Instructions](#Setup-Instructions)
-	* [How to setup Discord Server](#How-to-setup-Discord-Server)
-	* [How to build a Discord Bot](#How-to-build-a-Discord-Bot)
-	* [How to invite Bot to Server](#How-to-invite-Bot-to-Server)
+* [Introduction](#introduction)
+* [How it works](#dow-it-works)
+	* [Feature Showcase](#feature-showcase)
+* [Setup Instructions](#setup-Instructions)
+	* [How to setup Discord Server](#how-to-setup-the-discord-server)
+	* [How to build a Discord Bot](#how-to-build-a-discord-bot)
 * [How to use](#How-to-use)
 * [Discord](#Join-our-Discord!)
 
@@ -115,7 +114,7 @@ Sends the message in the Party/Guild Chat In Game. Example : !msg guild:Hey guys
 - ```!DM [recipient]:[your message]```
 Sends a DM to the recipient. Example : !DM captain shad:Hey guys!
 
-# Join our Discord!
+## Join our Discord!
 If you have any issues or just want to hang out and talk, Join our discord!
 
 **Join : https://discord.gg/Kvm54Gv**
@@ -125,4 +124,5 @@ If you have any issues or just want to hang out and talk, Join our discord!
 ## Donate
 
 Donations are much appreciated to aid future updates and development of the program :)
+
 [<img src="https://camo.githubusercontent.com/f896f7d176663a1559376bb56aac4bdbbbe85ed1/68747470733a2f2f7777772e70617970616c6f626a656374732e636f6d2f656e5f55532f692f62746e2f62746e5f646f6e61746543435f4c472e676966" alt="paypal" data-canonical-src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" style="max-width:100%;">](https://www.paypal.me/captainshad/)
