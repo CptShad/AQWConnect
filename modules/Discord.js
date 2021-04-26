@@ -44,6 +44,9 @@ function findZone(channel)
 function MessageListener(Message)
 {
 	var Content = String(Message.content);
+	var BotChannels = [Config['discord']['zone']['name'], Config['discord']['party']['name'], Config['discord']['guild']['name'], Config['discord']['whisper']['name']];
+	if (!BotChannels.includes(Message.channel.name))
+		return;
 	if (Content.toLowerCase().includes(Config['discord']['Prefix'] + "dm "))
 	{
 		var message = Content.substring(Content.indexOf(':') + 1);
@@ -54,6 +57,7 @@ function MessageListener(Message)
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
+		if(message[0] == ' ') message = message.substring(1);
 		message = AQMessage.XMLEncode(message);
 		AQMessage.SendDM(message, reciever);
 		return;
@@ -73,7 +77,6 @@ function MessageListener(Message)
 		else
 		{
 			message = Content.substring(Content.indexOf(':') + 1);
-			if(message[0] == ' ') message = message.substring(1);
 			argument = Content.substring(5, Content.indexOf(':'));
 			if (Content.indexOf(':') > 10)
 				argument = "zone";
@@ -84,6 +87,7 @@ function MessageListener(Message)
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
+		if(message[0] == ' ') message = message.substring(1);
 		message = AQMessage.XMLEncode(message);
 		AQMessage.Send(message, argument);
 		return;
@@ -97,6 +101,7 @@ function MessageListener(Message)
 		if (Config['game']['LogDiscrims'])
 			message = `${Message.author.username} : ${message}`;
 
+		if(message[0] == ' ') message = message.substring(1);
 		message = AQMessage.XMLEncode(message);
 		AQMessage.Send(message, "zone");
 		return;
