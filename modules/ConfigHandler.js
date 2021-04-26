@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require('path')
 
 const DefaultFile = {
     token : "",
@@ -6,6 +7,7 @@ const DefaultFile = {
     {
         Prefix : "!",
         SeamlessMode : false,
+        embedMessages : true,
         CategoryName : "Game Chat",
         zone :
         {
@@ -39,13 +41,15 @@ const DefaultFile = {
     }
 }
 
+const configLoc = path.join(__dirname, "..", "Config.json")
+
 class ConfigHandler
 {
     static InitializeConfig()
     {
-        if (!fs.existsSync('./Config.json'))
+        if (!fs.existsSync(configLoc))
         {
-            fs.writeFile('./Config.json', JSON.stringify(DefaultFile, null, '\t'), err => {
+            fs.writeFile(configLoc, JSON.stringify(DefaultFile, null, '\t'), err => {
                 if (err) throw err; 
 
                 console.log("Created default JSON file config.json");
@@ -53,7 +57,7 @@ class ConfigHandler
         }
     }
     static UpdateConfig(File) {
-        fs.writeFile('./Config.json', JSON.stringify(File, null, '\t'), err => {
+        fs.writeFile(configLoc, JSON.stringify(File, null, '\t'), err => {
             if (err) throw err; 
             console.log("Error Updating JSON file config.json");
         });

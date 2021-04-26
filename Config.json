@@ -3,6 +3,7 @@
 	"discord": {
 		"Prefix": "!",
 		"SeamlessMode": false,
+		"embedMessages": true,
 		"CategoryName": "Game Chat",
 		"zone": {
 			"enabled": true,

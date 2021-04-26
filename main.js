@@ -3,6 +3,7 @@ const path = require("path");
 require("./modules/Flash");
 const { ipcMain } = require("electron");
 const Discord = require("./modules/Discord");
+const AQMessage = require("./modules/AQMessage")
 
 let mainWindow;
 function createWindow() {
@@ -48,7 +49,39 @@ ipcMain.on("discord-start", (event, args) => {
 });
 ipcMain.on("discord-isEnabled", (event) => {
     event.returnValue = Discord.IsLogging;
+});
+
+var LoginServer = "Artix";
+var AutoRelog = false;
+ipcMain.on("set-login-server", (event, server) => {
+    LoginServer = server;
 })
+ipcMain.on("get-login-server", (event) => {
+    event.returnValue = LoginServer;
+})
+ipcMain.on("login", (event) => {
+    mainWindow.webContents.send("Login");
+})
+ipcMain.on("join", (event, server) => {
+    mainWindow.webContents.send("Connect", server);
+})
+ipcMain.on("set-autoRelog", (event, state) => {
+    AutoRelog = state;
+});
+ipcMain.on("get-autoRelog", (event) => {
+    event.returnValue = AutoRelog;
+});
+ipcMain.on("disconnect-called", (event) => {
+    if (AutoRelog)
+    {
+        setTimeout(() => {
+            mainWindow.webContents.send("Login");
+        }, 2000);
+        setTimeout(() => {
+            mainWindow.webContents.send("Connect", LoginServer);
+        }, 5000);
+    }
+});
 
 /* FUNCTIONS */
 function newWindow(event, url, frameName, disposition, options, additionalFeatures, referrer, postBody) { //Catched "new-window" event

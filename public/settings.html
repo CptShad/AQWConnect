@@ -39,36 +39,37 @@
                 background-color: #ff3838;
                 color: white;
             }
+            .form-row {
+                margin: 5px;
+            }
 
         </style>
         <script src="settingsHandler.js"></script>
     </head>
     <body>
         <div class="margin">
-            <h5>Important Settings</h5>
-            <p>
-                <label>Token : </label>
-                <input type ="text" id="token">
-                <button class="btn btn-primary" type="button" id="updateTokenBtn" style="float: right;">Update Token</button>
-            </p>
-
-            <p>
+            <h5>Settings</h5>
+            <div class="form-row">
                 <label>Server : </label>
-                <input name="Server Name" type="text" id="serverName">
-                <button class="btn btn-primary" type="button" id="connectBtn" style="float: right;">Connect Discord</button>
-            </p>
-
-            <div style="margin-bottom: 10px;">
+                <input name="Server Name" type="text" id="serverName" style="margin-right: 10px; margin-left: 5px;">
                 <button class="btn btn-primary" type="button" id="loginBtn">Login</button>
-                <button class="btn btn-primary" type="button" id="joinBtn">Join Server</button>
-
-                <button class="btn btn-primary" type="button" id="saveBtn" style="float: right;">Save Settings</button>
+                <button class="btn btn-primary" type="button" id="joinBtn" style="margin-right: 0;">Join Server</button>
             </div>
-            
-            <input name="AutoRelog" type="checkbox" id="autoRelogChk"> Auto-Relog
 
+            <div style="margin-bottom: 10px; margin-top: 10px;">                
+                <input name="AutoRelog" type="checkbox" id="autoRelogChk"> Auto-Relog
+            </div>          
+            
+
+            <p style="margin-top: 10px;">
+                <button class="btn btn-primary" type="button" id="connectBtn">Connect Discord</button>
+                <button class="btn btn-primary" type="button" id="openLogBtn" style="float: right;">Open Logs</button>
+            </p>
+            
             <div class="line">
-                <h5 style="margin-top: 15px; margin-bottom: 15px;">Config File</h5>
+                <h5 style="margin-top: 15px; margin-bottom: 15px;">Config File
+                    <button class="btn btn-primary" type="button" id="saveBtn" style="float: right;">Save Settings</button>
+                </h5>
 
                 <p>
                     <label>Token : </label>
@@ -83,6 +84,7 @@
                 </p>
                 <p>           
                     <input type="checkbox" id="seamlessChk"> <label>Seamless Mode</label>
+                    <input type="checkbox" id="embedChk"> <label>Enable Message as Embeds</label>
                 </p>
 
                 <h6>Channel Config</h6>

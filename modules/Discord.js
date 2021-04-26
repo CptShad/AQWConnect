@@ -1,12 +1,13 @@
 const DiscordModule = require('discord.js');
 const AQMessage = require('./AQMessage')
 const path = require("path");
-
 const Log = require('./Log')
 
+//Deleted the Config Json cache and updates the require whenever the config file is edited.
+//This enables Dynamic JSON File Loading
 function nocache(module) {
 	require("fs").watchFile(path.resolve(module), () => {
-		console.log("Config File Updated")
+		console.log("Config File Updated");
 		delete require.cache[require.resolve(module)]; Config = require(module)
 	})
 }
@@ -18,7 +19,11 @@ function ReadyListener(client)
 	console.log(`Logged in as ${client.user.tag}!`);
 }
 
-
+/**
+ * Finds the in game channel from discord channel name
+ * @param {String} channel 
+ * @returns In-Game Channel Name
+ */
 function findZone(channel)
 {
 	if (channel == Config['discord']['zone']['name'])
@@ -35,7 +40,6 @@ function findZone(channel)
 /**
  * 
  * @param {DiscordModule.Message} Message 
- * @returns 
  */
 function MessageListener(Message)
 {
@@ -144,18 +148,20 @@ class Discord
 		{
 			console.log(Message);
 			Log.Write(Message);
-			ChannelbyName.send({
-				embed: {
-					color: 51455,
-					description : Message,
-					title : "In-Game Chat Message",
-					timestamp: new Date(),
-					footer: {
-						text: "AQW Connect",
-						icon_url: "https://imgur.com/GW8sXRK.png"
+			if (Config['discord']['embedMessages'])
+				ChannelbyName.send({
+					embed: {
+						color: 51455,
+						description : Message,
+						title : "In-Game Chat Message",
+						timestamp: new Date(),
+						footer: {
+							text: "AQW Connect",
+							icon_url: "https://imgur.com/GW8sXRK.png"
+						}
 					}
-				}
-			});
+				});
+			else ChannelbyName.send(Message);
 		}
 	}
 

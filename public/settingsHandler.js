@@ -1,18 +1,12 @@
 const path = require("path");
 const { ConfigHandler, DefaultFile } = require("../modules/ConfigHandler");
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, shell } = require("electron");
 const Config = require("../Config.json");
 var Connected = false;
 
 Connected = ipcRenderer.sendSync("discord-isEnabled");
 onload = function () {
     UpdateView();
-
-    var updateTokenBtn = document.getElementById("updateTokenBtn");
-    updateTokenBtn.addEventListener("click", () => {
-        Config["token"] = document.getElementById("token").value;
-        ConfigHandler.UpdateConfig(Config);
-    });
 
     var connectBtn = document.getElementById("connectBtn");
     connectBtn.addEventListener("click", function (event) {
@@ -21,10 +15,10 @@ onload = function () {
             connectBtn.classList.remove("btn-red");
             connectBtn.innerText = "Connect Discord";
 
-            Config["token"] = document.getElementById("token").value;
+            Config["token"] = document.getElementById("tokenConf").value;
             ConfigHandler.UpdateConfig(Config);
             ipcRenderer.send("discord-start", [
-                document.getElementById("token").value,
+                document.getElementById("tokenConf").value,
                 false,
             ]);
             Connected = false;
@@ -33,10 +27,10 @@ onload = function () {
             connectBtn.classList.remove("btn-primary");
             connectBtn.innerText = "Disconnect Discord";
 
-            Config["token"] = document.getElementById("token").value;
+            Config["token"] = document.getElementById("tokenConf").value;
             ConfigHandler.UpdateConfig(Config);
             ipcRenderer.send("discord-start", [
-                document.getElementById("token").value,
+                document.getElementById("tokenConf").value,
                 true,
             ]);
             Connected = true;
@@ -46,19 +40,37 @@ onload = function () {
     var LoginBtn = document.getElementById("loginBtn");
     var JoinBtn = document.getElementById("joinBtn");
     LoginBtn.addEventListener("click", () => {
-        var Server = document.getElementById("serverName");
+        ipcRenderer.send("login");
     });
     JoinBtn.addEventListener("click", () => {
         var Server = document.getElementById("serverName");
+        if (Server.value == "") return;
+        ipcRenderer.send("join", Server.value);
+    });
+
+    var serverName = document.getElementById('serverName');
+    serverName.addEventListener("change", () => {
+        ipcRenderer.send("set-login-server", serverName.value);
+    });
+
+    var autoRelogChk = document.getElementById("autoRelogChk");
+   autoRelogChk.addEventListener("change", () => {
+        ipcRenderer.send("set-autoRelog", autoRelogChk.checked);
+    })
+
+    var openLogBtn = document.getElementById("openLogBtn");
+    openLogBtn.addEventListener("click", () => {
+        shell.openPath(path.join(__dirname, "..", "Logs"));
     });
 
     var saveBtn = document.getElementById("saveBtn");
     saveBtn.addEventListener("click", () => {
-        var Token = document.getElementById("tokenConf");
+        var tokenConf = document.getElementById("tokenConf");
         var prefix = document.getElementById("prefix");
         var Category = document.getElementById("category");
 
         var seamlessChk = document.getElementById("seamlessChk");
+        var embedChk = document.getElementById("embedChk");
 
         var zoneChk = document.getElementById("zoneEnabledChk");
         var zone = document.getElementById("zone");
@@ -79,10 +91,11 @@ onload = function () {
         var logDiscMsgChk = document.getElementById("logDiscMsgChk");
 
         var File = DefaultFile;
-        File["token"] = Token.value;
+        File["token"] = tokenConf.value;
         File["discord"]["Prefix"] = prefix.value;
         File["discord"]["CategoryName"] = Category.value;
         File["discord"]["SeamlessMode"] = seamlessChk.checked;
+        File['discord']['embedMessages'] = embedChk.checked;
         File["discord"]["zone"]["enabled"] = zoneChk.checked;
         File["discord"]["zone"]["name"] = zone.value;
         File["discord"]["guild"]["enabled"] = guildChk.checked;
@@ -97,12 +110,9 @@ onload = function () {
 
         ConfigHandler.UpdateConfig(File);
     });
-
-    var autoRelogChk = document.getElementById("autoRelogChk");
 };
 function UpdateView() {
-    var Token = document.getElementById("token");
-    var TokenConf = document.getElementById("tokenConf");
+    var tokenConf = document.getElementById("tokenConf");
 
     if (Connected) {
         connectBtn.classList.add("btn-red");
@@ -113,11 +123,17 @@ function UpdateView() {
         connectBtn.classList.remove("btn-red");
         connectBtn.innerText = "Connect Discord";
     }
+    var serverName = document.getElementById('serverName');
+    serverName.value = ipcRenderer.sendSync("get-login-server");
+
+    var autoRelogChk = document.getElementById("autoRelogChk");
+    autoRelogChk.checked = ipcRenderer.sendSync("get-autoRelog");
 
     var prefix = document.getElementById("prefix");
     var Category = document.getElementById("category");
 
     var seamlessChk = document.getElementById("seamlessChk");
+    var embedChk = document.getElementById("embedChk");
 
     var zoneChk = document.getElementById("zoneEnabledChk");
     var zone = document.getElementById("zone");
@@ -137,11 +153,11 @@ function UpdateView() {
 
     var logDiscMsgChk = document.getElementById("logDiscMsgChk");
 
-    Token.value = Config["token"];
-    TokenConf.value = Config["token"];
+    tokenConf.value = Config["token"];
     prefix.value = Config["discord"]["Prefix"];
     Category.value = Config["discord"]["CategoryName"];
     seamlessChk.checked = Config["discord"]["SeamlessMode"];
+    embedChk.checked = Config['discord']['embedMessages'];
     zoneChk.checked = Config["discord"]["zone"]["enabled"];
     zone.value = Config["discord"]["zone"]["name"];
     guildChk.checked = Config["discord"]["guild"]["enabled"];
