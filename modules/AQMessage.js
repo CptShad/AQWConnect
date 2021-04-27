@@ -3,7 +3,8 @@ const { BrowserWindow } = require('electron');
 class AQMessage {
     static FlashCall(func, message)
     {
-        BrowserWindow.getAllWindows()[0].webContents.send(func, message);
+        var mainwin = BrowserWindow.getAllWindows().find(win => win.id == 1);
+        mainwin.webContents.send(func, message);
     }
 
     /**
