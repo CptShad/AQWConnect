@@ -42,7 +42,6 @@ const DefaultFile = {
 }
 
 const configLoc = path.join(__dirname, "..", "Config.json")
-
 class ConfigHandler
 {
     static InitializeConfig()

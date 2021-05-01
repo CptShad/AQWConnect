@@ -3,6 +3,7 @@ const path = require("path");
 const dateFormat = require("dateformat");
 const dedent = require("dedent");
 
+const consoleLog = path.join(__dirname, "..", "Console.log");
 class Log {
     static logPath;
     static Initialize() {
@@ -28,10 +29,22 @@ class Log {
             if (err) console.log(err);
         });
     }
-    static Write(message) {
-        fs.appendFile(this.logPath, `[${dateFormat(new Date(), "HH:mm:ss")}] ${message}\n`, (err) => {
-            if (err) console.log(err);
-        });
-    }    
+    static Write(message, console = false) {
+        if (console == false) {
+            fs.appendFile(this.logPath, `[${dateFormat(new Date(), "HH:mm:ss")}] ${message}\n`, (err) => {
+                if (err) console.log(err);
+            });
+        }
+        else {
+            fs.appendFile(this.logPath, `[${dateFormat(new Date(), "HH:mm:ss")}] ${message}\n`, (err) => {
+                if (err) console.log(err);
+            });
+
+            //Console
+            fs.appendFile(consoleLog, `[${dateFormat(new Date(), "HH:mm:ss")}] ${message}\n`, (err) => {
+                if (err) console.log(err);
+            });
+        }
+    }  
 }
 module.exports = Log;

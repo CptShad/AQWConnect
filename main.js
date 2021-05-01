@@ -3,7 +3,8 @@ const path = require("path");
 require("./modules/Flash");
 const { ipcMain } = require("electron");
 const Discord = require("./modules/Discord");
-const AQMessage = require("./modules/AQMessage")
+const AQMessage = require("./modules/AQMessage");
+const { fstat } = require("fs");
 
 let mainWindow;
 function createWindow() {
@@ -25,8 +26,12 @@ function createWindow() {
     require("./modules/app");
 }
 
+app.disableHardwareAcceleration();
 app.on("ready", createWindow);
-app.on("window-all-closed", () => app.quit());
+app.on("window-all-closed", () => {
+    require('fs').unlinkSync(path.join(__dirname, "Console.log"));
+    app.quit();
+});
 
 
 
@@ -45,7 +50,9 @@ ipcMain.on("packet", (event, packet) => {
     }
 });
 ipcMain.on("discord-start", (event, args) => {
-    Discord.Initiate(args[0], args[1]);
+    if (args[1] == true)
+        Discord.Initiate(args[0], args[1]);
+    else Discord.DestroyClient();
 });
 ipcMain.on("discord-isEnabled", (event) => {
     event.returnValue = Discord.IsLogging;

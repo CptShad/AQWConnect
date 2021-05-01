@@ -7,8 +7,9 @@ const { dialog } = require('electron')
 //Deleted the Config Json cache and updates the require whenever the config file is edited.
 //This enables Dynamic JSON File Loading
 function nocache(module) {
-	require("fs").watchFile(path.resolve(module), () => {
+	require("fs").watchFile(path.resolve(module), () => {		
 		console.log("Config File Updated");
+		Log.Write("Config File Updated", true);
 		delete require.cache[require.resolve(module)]; Config = require(module)
 	})
 }
@@ -18,6 +19,7 @@ var Config = require(path.join(__dirname, "..", "Config.json"))
 function ReadyListener(client)
 {
 	console.log(`Logged in as ${client.user.tag}!`);
+	Log.Write(`Logged in as ${client.user.tag}!`, true);
 	dialog.showMessageBox({
 		message: `Logged in as ${client.user.tag}!`
 	})
@@ -89,7 +91,7 @@ function MessageListener(Message)
 
 	var Content = String(Message.content);
 	var defaultMatch = /(\w{2,3}) (.+)/;
-	var match = Content.match(/(\w{2,3}) (.+):\s*(.+)/);
+	var match = Content.match(/(\w{2,3}) (.+?):\s*(.+)/);
 	var defaultMatched = false;
 	if (match == null) 
 	{
@@ -118,6 +120,10 @@ function MessageListener(Message)
 	}
 	else if (Config['discord']['SeamlessMode'])
 	{
+		if (match[1].toLocaleLowerCase() == "dm") {
+			DMHandler(Message.author.username, match[2], match[3]);
+			return;
+		}
 		var zone = findZone(Message.channel.name);
 		TextHandler(Message.author.username, Content, zone);
 	}
@@ -130,18 +136,29 @@ class Discord
 	static IsReady;
 	static IsLogging;
 	static Prefix;
-	static Initiate(token, enableLogging)
+	static Initiate(token)
 	{
-		this.Token;
-		this.Client = new DiscordModule.Client();
+		if (this.Client) this.DestroyClient();
+		this.Client = new DiscordModule.Client();	
 		this.IsReady = true;
-		this.IsLogging = enableLogging;
+		this.IsLogging = true;
 		this.Client.login(token).catch(err => {
+			Log.Write("Invalid Token", true);
 			console.log("Invalid Token")
 			this.IsReady = false;
 		});
-		if (this.IsReady)
-			this.RegisterEvents();
+		this.RegisterEvents();
+	}
+	static DestroyClient()
+	{
+		if (this.Client) 
+		{
+			this.Client.removeAllListeners();
+			this.Client.destroy();
+		}
+		this.Client = null;
+		this.IsReady = false;
+		this.IsLogging = false;
 	}
 	static RegisterEvents()
 	{
@@ -164,11 +181,18 @@ class Discord
 			var CategoryName = Config['discord']['CategoryName'];
 			var ChannelName = Config['discord'][Channel]['name'];
 			var Category = Discord.Client.channels.cache.find(ch => ch.type == "category" && ch.name.toLowerCase() == CategoryName.toLowerCase())
+			if (Category == null)
+			{
+				console.log(`Could not find category "${CategoryName}"`);
+				Log.Write(`Could not find category "${CategoryName}"`, true);
+				return;
+			}
 			var ChannelbyName = Category.children.find(ch =>  ch.name.toLowerCase() == ChannelName.toLowerCase());
 			if (ChannelbyName != null)
 			{
 				console.log(Message);
 				Log.Write(Message);
+				Log.Write(Message, true);
 				if (Config['discord']['embedMessages'])
 					ChannelbyName.send({
 						embed: {
@@ -186,7 +210,8 @@ class Discord
 			}
 		}
 		catch(error) {
-			console.log("Error finding discord channel.")
+			console.log("Error sending discord message.");
+			Log.Write("Error sending discord message.", true);
 		}
 	}
 

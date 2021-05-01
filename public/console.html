@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Console</title>
+        <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+        <style>
+            .margin {
+                margin: 10px;
+            }
+            .txt-area {
+                height: 84vh !important;
+                width: 100%;
+                position: static;
+                margin-top: 15px;
+                resize: none;
+                background-color: white !important;
+            }
+
+        </style>
+        <script>
+            const { ipcRenderer } = require("electron");
+            const path = require("path");
+            const fs = require("fs");
+            const consoleLog = path.join(__dirname, "..", "Console.log");
+
+            function updateConsole() {
+                var consoleWindow = document.getElementById('consoleWindow');
+                fs.readFile(consoleLog, 'utf8', function(err, data) {     
+                    if (err) console.log(err);
+                    if (data) {            
+                        consoleWindow.innerHTML = data;
+                        consoleWindow.scrollTop = consoleWindow.scrollHeight
+                    }
+                });
+            }
+
+            onload = function () {        
+                updateConsole();
+                fs.watchFile(consoleLog, updateConsole);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="margin">
+            <h5>Console</h5>
+            <textarea class="txt-area form-control" readonly id="consoleWindow"></textarea>
+        </div>
+    </body>
+</html>
