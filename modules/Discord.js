@@ -120,7 +120,8 @@ function MessageListener(Message)
 	}
 	else if (Config['discord']['SeamlessMode'])
 	{
-		if (match[1].toLocaleLowerCase() == "dm") {
+
+		if (match && match[1].toLocaleLowerCase() == "dm") {
 			DMHandler(Message.author.username, match[2], match[3]);
 			return;
 		}
