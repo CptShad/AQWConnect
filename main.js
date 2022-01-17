@@ -4,7 +4,7 @@ require("./modules/Flash");
 const { ipcMain } = require("electron");
 const Discord = require("./modules/Discord");
 const AQMessage = require("./modules/AQMessage");
-const { fstat } = require("fs");
+const { fs } = require("fs");
 
 let mainWindow;
 function createWindow() {
@@ -26,14 +26,15 @@ function createWindow() {
     require("./modules/app");
 }
 
-app.disableHardwareAcceleration();
+app.disableHardwareAcceleration(); 
 app.on("ready", createWindow);
 app.on("window-all-closed", () => {
-    require('fs').unlinkSync(path.join(__dirname, "Console.log"));
+    try {
+        require('fs').unlinkSync(path.join(__dirname, "Console.log"));
+    }
+    catch { }
     app.quit();
 });
-
-
 
 
 /* IPC SECTION */
@@ -93,17 +94,15 @@ ipcMain.on("disconnect-called", (event) => {
 /* FUNCTIONS */
 function newWindow(event, url, frameName, disposition, options, additionalFeatures, referrer, postBody) { //Catched "new-window" event
 	//Modify the popup window for character page to disable node integration (Needed for JQuery to work)
-	if (url.includes("http://www.aq.com/character.asp"))
-	{
-		event.preventDefault();
-		const win = new BrowserWindow({
-			webContents: options.webContents, // use existing webContents if provided
-			show: true,
-			webPreferences: {
-				plugins: true
-			}
-		});
-		var useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ArtixGameLauncher/2.0.4 Chrome/83.0.4103.122 Electron/9.4.4 Safari/537.36";
-		win.loadURL(url, { userAgent: useragent })
-	}
+    event.preventDefault();
+    const win = new BrowserWindow({
+        webContents: options.webContents, // use existing webContents if provided
+        show: true,
+        webPreferences: {
+            plugins: true
+        }
+    });
+    win.setMenu(null);
+    var useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ArtixGameLauncher/2.0.4 Chrome/83.0.4103.122 Electron/9.4.4 Safari/537.36";
+    win.loadURL(url, { userAgent: useragent })
 }

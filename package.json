@@ -1,27 +1,27 @@
 {
-    "name": "AQWConnect",
-    "version": "1.0",
-    "description": "A client with AQW and Discord Integration",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "keywords": [
-        "AQW",
-        "AQWorlds",
-        "AQWConnect",
-        "CptShad"
-    ],
-    "author": "CptShad",
-    "license": "ISC",
-    "devDependencies": {
-        "electron": "^9.0.5"
-    },
-    "dependencies": {
-        "dateformat": "^4.5.1",
-        "dedent": "^0.7.0",
-        "discord-rpc": "^3.2.0",
-        "discord.js": "^12.5.3",
-        "nw-flash-trust": "^0.3.0"
-    }
+  "name": "AQWConnect",
+  "version": "1.0",
+  "description": "A client with AQW and Discord Integration",
+  "main": "main.js",
+  "scripts": {
+      "start": "electron ."
+  },
+  "keywords": [
+      "AQW",
+      "AQWorlds",
+      "AQWConnect",
+      "CptShad"
+  ],
+  "author": "CptShad",
+  "license": "ISC",
+  "dependencies": {
+    "dateformat": "^4.5.1",
+    "dedent": "^0.7.0",
+    "discord-rpc": "^4.0.1",
+    "discord.js": "^12.5.3",
+    "nw-flash-trust": "^0.3.0"
+  },
+  "devDependencies": {
+    "electron": "^9.0.5"
+  }
 }
